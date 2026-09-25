@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Help - CSCSCA - Charles' Super Cool Sound Change Applier</title>
+        <link href="../assets/cscsca.svg", rel="icon"/>
+        <link href="../index.css" rel="stylesheet"/>
+        <meta charset="utf-8">
+    </head>
+    <body class="h-screen mx-4 bg-zinc-900 text-zinc-200">
+        <a href="../">
+            <img src="../assets/banner.svg" width="300" class="m-4"/>
+        </a>
+        <div>
+            <h2 class="text-4xl">Rules</h2>
+            <hr/>
+            <p>A standard rule is written as follows:</p>
+            <div id="cscsca-help-rules-1" class="h-6 w-64 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <br/>
+            <p>The input and output of a rule are made up of phones. Phones are made up of characters not separated by whitespace like <code class="bg-zinc-700 rounded-sm px-1">a</code>, <code class="bg-zinc-700 rounded-sm px-1">á</code>, <code class="bg-zinc-700 rounded-sm px-1">ts</code>, and <code class="bg-zinc-700 rounded-sm px-1">a_phone</code>.</p>
+            <p>Each character in the input is considered to be a phone.</p>
+            <p>An input <code class="bg-zinc-700 rounded-sm px-1">achȍ</code> becomes the phones <code class="bg-zinc-700 rounded-sm px-1">a</code>, <code class="bg-zinc-700 rounded-sm px-1">c</code>, <code class="bg-zinc-700 rounded-sm px-1">h</code>, and <code class="bg-zinc-700 rounded-sm px-1">ȍ</code>.</p>
+            <p>Note: the diacritic, <code class="bg-zinc-700 rounded-sm px-1">\u{030F}</code>, remains attached to the <code class="bg-zinc-700 rounded-sm px-1">o</code> as any¹ unicode combining characters will be combined with the proceeding base character.</p>
+            <br/>
+            <p>If, in the example above, <code class="bg-zinc-700 rounded-sm px-1">ch</code> is intended to represent <code class="bg-zinc-700 rounded-sm px-1">tʃ</code>, the phones may be merged with a rule like:</p>
+            <div id="cscsca-help-rules-2" class="h-6 w-48 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <p>producing the phones <code class="bg-zinc-700 rounded-sm px-1">a</code>, <code class="bg-zinc-700 rounded-sm px-1">tʃ</code>, and <code class="bg-zinc-700 rounded-sm px-1">ȍ</code>.</p>
+            
+            <!-- todo: conditions, literally everything else -->
+            
+            <br/>
+            <br/>
+            <p>(1) This may not be up to date with the latest unicode version, but should support the vast majority use cases.</p>
+
+
+
+            <br/>
+            More Comming Soon
+        </div>
+    </body>
+
+    <script src="index.ts"></script>
+</html>

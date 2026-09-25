@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CSCSCA - Charles' Super Cool Sound Change Applier</title>
+        <link href="assets/cscsca.svg", rel="icon"/>
+        <link href="index.css" rel="stylesheet"/>
+        <meta charset="utf-8">
+    </head>
+    <body class="h-screen mx-4 bg-zinc-900 text-zinc-200">
+        <div class="h-full width-[80%]">
+            <img src="./assets/banner.svg" width="300" class="m-4"/>
+            <div class="grid grid-cols-3 md:grid-cols-4 grid-rows-1 gap-4">
+                <h3 class="text-3xl">Input</h3>
+                <h3 class="text-3xl col-span-2 md:col-span-3">Rules</h3>
+            </div>
+
+            <div class="grid grid-cols-3 md:grid-cols-4 grid-rows-1 min-h-96 h-[50%] gap-4">
+                <div class="h-full">
+                    <textarea id="cscsca-input" class="h-full w-full resize-none border-2 border-zinc-700 rounded-md bg-zinc-800">pata
+takan
+limu
+ku
+</textarea>
+                </div>
+                <div class="col-span-2 md:col-span-3 h-full">
+                    <div id="cscsca-rules" class="h-full w-full border-2 border-zinc-700 rounded-md overflow-hidden">
+                        
+                    </div>
+                </div>
+            </div>
+            
+
+            <div>
+                <div class="my-2">
+                    <button id="cscsca-apply" class="w-full border-2 border-zinc-700 hover:border-zinc-800 rounded-md bg-zinc-800 hover:bg-zinc-700">Apply</button>
+                </div>
+
+                <div>
+                    <div class="md:flex md:gap-8">
+                        <div class="flex md:gap-2">
+                            <h5>Trace Type:</h5>
+                            <select class="border-zinc-700 border-2 rounded-md bg-zinc-800 px-2" name="trace" id="cscsca-trace">
+                                <option value="output">Final Only</option>
+                                <option value="input/output" selected>Initial and Final</option>
+                                <option value="diff">Trace Changed Prints Only</option>
+                                <option value="all">Trace All Prints</option>
+                            </select>
+                        </div>
+
+                        <div class="flex md:gap-8">
+                            <a href="./help">
+                                <button class="border-2 border-zinc-700 hover:border-zinc-800 rounded-md bg-zinc-800 hover:bg-zinc-700 px-2">Help</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-2"/>
+
+            <div>
+                <h3 class="text-3xl">Output</h3>
+                <div id="cscsca-output" class="my-2 overflow-x-auto"></div>
+            </div>
+        </div>
+    </body>
+    
+    <script src="index.ts"></script>
+</html>

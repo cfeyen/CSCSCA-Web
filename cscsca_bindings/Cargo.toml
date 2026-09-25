@@ -1,0 +1,11 @@
+[package]
+name = "cscsca_bindings"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+cscsca = { git = "https://github.com/cfeyen/cscsca.git", features = ["debug_tokens"] }
+wasm-bindgen = "0.2.128"

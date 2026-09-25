@@ -1,0 +1,17 @@
+{
+  "name": "cscsca_web",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "monaco-editor": "^0.56.0",
+    "tailwindcss": "^4.3.3"
+  }
+}
