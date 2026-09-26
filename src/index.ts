@@ -29,15 +29,46 @@ editor.onEndUpdate(() => {
     localStorage.setItem(RULE_KEY, editor.getValue());
 });
 
-const input_box = document.getElementById("cscsca-input") as HTMLTextAreaElement;
+const input_box = document.getElementById("cscsca-input")! as HTMLTextAreaElement;
 
-function on_apply() {
+(document.getElementById("cscsca-apply")!).onclick = () => {
     let input = input_box.value;
     let rules = editor.getValue();
 
     let result = apply(input, rules) as sca.ScaResult;
 
     set_output(result);
+};
+
+function new_file_input(): HTMLInputElement {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "*.sca,*.cscsca"
+    input.hidden = true;
+    return input;
 }
 
-(document.getElementById("cscsca-apply") as HTMLElement).onclick = on_apply;
+const import_selector = new_file_input();
+
+(document.getElementById("cscsca-rules-import")!).onclick = () => {
+    import_selector.click();
+};
+
+import_selector.onchange = async () => {
+    const file = import_selector.files?.[0];
+
+    if (file) {
+        import_selector.value = "";
+        const new_rules = await file.text();
+        editor.setValue(new_rules);
+    } 
+}
+
+(document.getElementById("cscsca-rules-export") as HTMLElement).onclick = () => {
+    const blob = new Blob([editor.getValue()], { type: "text/plain" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "sound-change.sca";
+    link.click();
+};

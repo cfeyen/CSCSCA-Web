@@ -1,7 +1,7 @@
 import * as sca from "../cscsca_bindings/src/sca_type_bindings.js"
 
-const output_box = document.getElementById("cscsca-output") as HTMLElement;
-const trace_box = document.getElementById("cscsca-trace") as HTMLSelectElement;
+const output_box = document.getElementById("cscsca-output")!;
+const trace_box = document.getElementById("cscsca-trace")! as HTMLSelectElement;
 
 const TRACE_MODE_OUTPUT_ONLY = "output"
 const TRACE_MODE_INPUT_AND_OUTPUT_ONLY = "input/output"
