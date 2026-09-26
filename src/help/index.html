@@ -22,17 +22,115 @@
             <p>Note: the diacritic, <code class="bg-zinc-700 rounded-sm px-1">\u{030F}</code>, remains attached to the <code class="bg-zinc-700 rounded-sm px-1">o</code> as any¹ unicode combining characters will be combined with the proceeding base character.</p>
             <br/>
             <p>If, in the example above, <code class="bg-zinc-700 rounded-sm px-1">ch</code> is intended to represent <code class="bg-zinc-700 rounded-sm px-1">tʃ</code>, the phones may be merged with a rule like:</p>
-            <div id="cscsca-help-rules-2" class="h-6 w-48 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <div id="cscsca-help-rules-2" class="h-12 w-96 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
             <p>producing the phones <code class="bg-zinc-700 rounded-sm px-1">a</code>, <code class="bg-zinc-700 rounded-sm px-1">tʃ</code>, and <code class="bg-zinc-700 rounded-sm px-1">ȍ</code>.</p>
-            
-            <!-- todo: conditions, literally everything else -->
-            
+            <br/>
+            <p>Note: A line starting with <code class="bg-zinc-700 rounded-sm px-1">##</code> is a comment and is ignored when applying rules.</p>
+            <br/>
+            <p>The shift token <code class="bg-zinc-700 rounded-sm px-1">>></code> may also be replaced with a few alternatives.</p>
+            <ul class="list-disc pl-8">
+                <li>
+                    <p><code class="bg-zinc-700 rounded-sm px-1">>></code>: The rule applies left-to-right and does not try to reapply on every set of phones replaced</p>
+                </li>
+                <li>
+                    <p><code class="bg-zinc-700 rounded-sm px-1">></code>: The rule applies left-to-right and tries to reapply on every set of phones replaced</p>
+                </li>
+                <li>
+                    <p><code class="bg-zinc-700 rounded-sm px-1"><<</code>: The rule applies right-to-left and does not try to reapply on every set of phones replaced</p>
+                </li>
+                <li>
+                    <p><code class="bg-zinc-700 rounded-sm px-1"><</code>: The rule applies right-to-left and tries to reapply on every set of phones replaced</p>
+                </li>
+            </ul>
+            <br/>
+            <p>There are also some special characters that represent phones.</p>
+            <ul class="list-disc pl-8">
+                <li>
+                    <p><code class="bg-zinc-700 rounded-sm px-1">#</code>: represents a word boundary</p>
+                </li>
+                <li>
+                    <p><code class="bg-zinc-700 rounded-sm px-1">*</code>: represents any phone except a word boundary</p>
+                </li>
+            </ul>
             <br/>
             <br/>
             <p>(1) This may not be up to date with the latest unicode version, but should support the vast majority use cases.</p>
+            <br/>
+            <br/>
+            <h3 class="text-4xl">Conditions</h2>
+            <hr/>
+            <p>A rule may also be given a condition starting with <code class="bg-zinc-700 rounded-sm px-1">/</code>.</p>
+            <div id="cscsca-help-conditions-1" class="h-12 w-96 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <p>A rule may be given more than condition one and applies if any of them succeeds.</p>
+            <div id="cscsca-help-conditions-2" class="h-12 w-96 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <p>If two or more conditions must match for a rule to apply, start all conditions after the first with <code class="bg-zinc-700 rounded-sm px-1">&</code>.</p>
+            <div id="cscsca-help-conditions-3" class="h-12 w-96 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <p>If <code class="bg-zinc-700 rounded-sm px-1">&!</code> is used instead, all following subconditions must fail for the condition to be able to succeed.</p>
+            <div id="cscsca-help-conditions-4" class="h-12 w-144 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <p>Note: <code class="bg-zinc-700 rounded-sm px-1">&</code> and <code class="bg-zinc-700 rounded-sm px-1">&!</code> are right associative.</p>
+            <br/>
+            <p>A condition must contain a <code class="bg-zinc-700 rounded-sm px-1">_</code> separated from other phones by whitespace.</p>
+            <p>Any phones before the <code class="bg-zinc-700 rounded-sm px-1">_</code> must exist before the input and any phones after the <code class="bg-zinc-700 rounded-sm px-1">_</code> must exist after the input for a condition to succeed.</p>
+            <div id="cscsca-help-conditions-5" class="h-6 w-96 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <br/>
+            <p>A rule may also be have anti-conditions which follow conditions and start with <code class="bg-zinc-700 rounded-sm px-1">//</code>.</p>
+            <div id="cscsca-help-conditions-6" class="h-12 w-96 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <p>A rule does not apply if any anti-condition succeeds.</p>
+            <!-- todo: = -->
+            <br/>
+            <h3 class="text-4xl">Scopes</h2>
+            <hr/>
+            <p>Scopes are a way to dynamically represent phones.</p>
+            <br/>
+            <h3 class="text-2xl">Selection Scopes</h3>
+            <p>A selection scope is a comma-separated list of sets of phones encloded in curly braces (<code class="bg-zinc-700 rounded-sm px-1">{</code> and <code class="bg-zinc-700 rounded-sm px-1">}</code>).</p>
+            <p>A selection scope represents one of the sets of phones inside.</p>
+            <div id="cscsca-help-scopes-1" class="h-12 w-96 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <br/>
+            <h3 class="text-2xl">Optional Scopes</h3>
+            <p>An optional scope is a sets of phones encloded in parenthesis (<code class="bg-zinc-700 rounded-sm px-1">(</code> and <code class="bg-zinc-700 rounded-sm px-1">)</code>).</p>
+            <p>An optional scope represents either the phones it contains or nothing.</p>
+            <div id="cscsca-help-scopes-2" class="h-12 w-96 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <br/>
+            <h3 class="text-2xl">Repetition Scopes</h3>
+            <p>A repetition scope is a sets of phones encloded in square brackets (<code class="bg-zinc-700 rounded-sm px-1">[</code> and <code class="bg-zinc-700 rounded-sm px-1">]</code>).</p>
+            <p>A repetition scope represents the contained set of phones repeated 0 or more times.</p>
+            <div id="cscsca-help-scopes-3" class="h-12 w-144 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <p>To limit the number of possible repetitions, a repetition scope may be ended with <code class="bg-zinc-700 rounded-sm px-1">=</code> followed by the minimum number of repetition and optionally followed by a comma and the maximum number of repetitions.</p>
+            <div id="cscsca-help-scopes-4" class="h-12 w-144 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <p>Note: repetitions cannot be put in the input or output of a rule.</p>
+            <br/>
+            <br/>
+            <h3 class="text-4xl">Labels</h2>
+            <hr/>
+            <p>Scopes and the <code class="bg-zinc-700 rounded-sm px-1">*</code> token try to agree across input and output.</p>
+            <div id="cscsca-help-labels-1" class="h-12 w-64 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <p>However this may lead to unintended behavior as in the example bellow where the first scope in the input agrees with the first scope in the output.</p>
+            <div id="cscsca-help-labels-2" class="h-12 w-128 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <p>To fix this, scopes (and <code class="bg-zinc-700 rounded-sm px-1">*</code>) can be prefixed with a label that starts with <code class="bg-zinc-700 rounded-sm px-1"><i>$</i></code>.</p>
+            <div id="cscsca-help-labels-3" class="h-12 w-128 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <br/>
+            <p>Labels cause selections to agree in which subgroup they select, optionals in if their content is required, repetitions in maximum length², and <code class="bg-zinc-700 rounded-sm px-1">*</code> in which phone is required.</p>
+            <br/>
+            <p>Labels can also cause agreement in conditions as well.</p>
+            <div id="cscsca-help-labels-4" class="h-12 w-128 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <br/>
+            <br/>
+            <p>(2) This behavior may change in the future.</p>
+            <br/>
+            <br/>
+            <h3 class="text-4xl">Definitions</h2>
+            <hr/>
 
 
+            <!-- todo: agreement and labels -->
+            <!-- todo: Definitions -->
+            <!-- todo: PRINT -->
+            <!-- todo: Escapes and multiline rules -->
+            <!-- todo: ! -->
+            
 
+            <br/>
             <br/>
             More Comming Soon
         </div>

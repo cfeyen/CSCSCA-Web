@@ -5,6 +5,7 @@ node_modules
 out
 dist
 *.tgz
+src/index.css
 
 # code coverage
 coverage

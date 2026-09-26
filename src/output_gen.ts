@@ -31,7 +31,7 @@ export function set_output(result: sca.ScaResult) {
                 break;
         }
     } else {
-        output_box.appendChild(create_error_element(error))
+        output_box.appendChild(create_error_element(error.get_error_msg()))
     }
 }
 

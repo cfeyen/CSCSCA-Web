@@ -74,7 +74,6 @@ class ScaThemeData implements monaco.editor.IStandaloneThemeData {
         { token: TOKEN_TYPE_SCOPE_BOUND, foreground: "CCCCCC" },
         { token: TOKEN_TYPE_NUMBER, foreground: "B5CEA8" },
         { token: TOKEN_TYPE_PHONE, foreground: "9CDCFE" },
-        { token: TOKEN_TYPE_WHITESPACE, foreground: "CC0000" },
     ];
 }
 
@@ -91,6 +90,13 @@ export function create_cscsca_editor(id: string, rules: string, readOnly = false
         editContext: false,
         readOnly,
         minimap: { enabled: !readOnly },
-        lineNumbers: readOnly ? "off" : "on"
+        overviewRulerLanes: readOnly ? 0 : 3,
+        scrollbar: {
+            vertical: readOnly ? "hidden" : "auto",
+            horizontal: readOnly ? "hidden" : "auto",
+        },
+        scrollBeyondLastLine: !readOnly,
+        lineNumbers: readOnly ? "off" : "on",
+        renderLineHighlight: readOnly ? "none" : "all",
     });
 }

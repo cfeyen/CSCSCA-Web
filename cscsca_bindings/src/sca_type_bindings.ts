@@ -1,5 +1,23 @@
+export class ScaErrorData {
+    constructor(error: string, input: string | null) {
+        this.error = error;
+        this.input = input;
+    }
+
+    private error: string;
+    private input: string | null;
+
+    public get_error_msg(): string {
+        if (this.input == null) {
+            return this.error
+        } else {
+            return `${this.error}\nOccurred when applying changes to '${this.input}'`;
+        }
+    }
+}
+
 export class ScaResult {
-    constructor(headers: string[], evolutions: ScaEvolution[], error: string | null) {
+    constructor(headers: string[], evolutions: ScaEvolution[], error: ScaErrorData | null) {
         this.headers = headers;
         this.evolutions = evolutions;
         this.error = error;
@@ -7,7 +25,7 @@ export class ScaResult {
 
     private headers: string[];
     private evolutions: ScaEvolution[];
-    private error: string | null;
+    private error: ScaErrorData | null;
 
     public get_headers(): string[] {
         return this.headers;
@@ -15,7 +33,7 @@ export class ScaResult {
     public get_evolutions(): ScaEvolution[] {
         return this.evolutions;
     }
-    public get_error(): string | null {
+    public get_error(): ScaErrorData | null {
         return this.error;
     }
 }

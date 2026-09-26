@@ -129,12 +129,20 @@ extern "C" {
     pub type ScaResult;
 
     #[wasm_bindgen(constructor)]
-    fn new(headers: Vec<String>, evolutions: Vec<ScaEvolution>, error: Option<String>) -> ScaResult;
+    fn new(headers: Vec<String>, evolutions: Vec<ScaEvolution>, error: Option<ScaErrorData>) -> ScaResult;
+}
+
+#[wasm_bindgen(module = "/src/sca_type_bindings.ts")]
+extern "C" {
+    pub type ScaErrorData;
+
+    #[wasm_bindgen(constructor)]
+    fn new(error: String, input: Option<&str>) -> ScaErrorData;
 }
 
 impl ScaResult {
-    fn new_error(e: ScaError) -> Self {
-        Self::new(Vec::new(), Vec::new(), Some(e.to_string()))
+    fn new_error(e: ScaError, input: Option<&str>) -> Self {
+        Self::new(Vec::new(), Vec::new(), Some(ScaErrorData::new(e.to_string(), input)))
     }
 
     fn new_result(headers: Vec<String>, evolutions: Vec<ScaEvolution>) -> Self {
@@ -145,7 +153,7 @@ impl ScaResult {
 #[wasm_bindgen]
 pub fn apply(input: &str, rules: &str) -> ScaResult {
     let rules = match build_rules(rules, &mut WebGetter) {
-        Err(e) => return ScaResult::new_error(e),
+        Err(e) => return ScaResult::new_error(e, None),
         Ok(rules) => rules,
     };
 
@@ -156,7 +164,7 @@ pub fn apply(input: &str, rules: &str) -> ScaResult {
         let mut runtime = LogRuntime::default();
 
         let output = match rules.apply_fallible(input, &mut runtime) {
-            Err(e) => return ScaResult::new_error(e),
+            Err(e) => return ScaResult::new_error(e, Some(input)),
             Ok(output) => output,
         };
 
