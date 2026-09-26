@@ -9,7 +9,7 @@ async function build(): Promise<boolean> {
         await Bun.$`bun run tailwindcss -i ./src/input.css -o ./src/index.css`
 
         await Bun.build({
-        entrypoints: ['./src/index.html', './src/help/index.html'],
+        entrypoints: ['./src/index.html', './src/help/index.html', './src/about/index.html'],
         outdir: './dist',
         minify: !should_watch,
         });
@@ -38,6 +38,14 @@ if (should_watch && OK) {
     }))
 
     watch("./src/help", ((_event, filename) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            console.log(`'${filename}' changed`);
+            build();
+        }, 100)
+    }))
+
+    watch("./src/about", ((_event, filename) => {
         clearTimeout(timer);
         timer = setTimeout(() => {
             console.log(`'${filename}' changed`);
