@@ -184,9 +184,6 @@
   .m-4 {
     margin: calc(var(--spacing) * 4);
   }
-  .mx-4 {
-    margin-inline: calc(var(--spacing) * 4);
-  }
   .my-2 {
     margin-block: calc(var(--spacing) * 2);
   }
@@ -299,6 +296,12 @@
   .px-2 {
     padding-inline: calc(var(--spacing) * 2);
   }
+  .px-4 {
+    padding-inline: calc(var(--spacing) * 4);
+  }
+  .py-4 {
+    padding-block: calc(var(--spacing) * 4);
+  }
   .pb-2 {
     padding-bottom: calc(var(--spacing) * 2);
   }
@@ -341,8 +344,14 @@
     .md\:col-span-3 {
       grid-column: span 3 / span 3;
     }
+    .md\:flex {
+      display: flex;
+    }
     .md\:grid-cols-4 {
       grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .md\:gap-4 {
+      gap: calc(var(--spacing) * 4);
     }
   }
 }

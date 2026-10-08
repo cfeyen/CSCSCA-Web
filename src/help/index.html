@@ -6,7 +6,7 @@
         <link href="../index.css" rel="stylesheet"/>
         <meta charset="utf-8">
     </head>
-    <body class="h-screen mx-4 bg-zinc-900 text-zinc-200">
+    <body class="h-screen px-4 bg-zinc-900 text-zinc-200">
         <a href="../">
             <img src="../assets/banner.svg" width="300" class="m-4"/>
         </a>
@@ -98,7 +98,6 @@
             <div id="cscsca-help-scopes-3" class="h-12 w-144 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
             <p>To limit the number of possible repetitions, a repetition scope may be ended with <code class="bg-zinc-700 rounded-sm px-1">=</code> followed by the minimum number of repetition and optionally followed by a comma and the maximum number of repetitions.</p>
             <div id="cscsca-help-scopes-4" class="h-12 w-144 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
-            <p>Note: repetitions cannot be put in the input or output of a rule.</p>
             <br/>
             <br/>
             <h3 class="text-4xl">Labels</h2>
@@ -110,13 +109,10 @@
             <p>To fix this, scopes (and <code class="bg-zinc-700 rounded-sm px-1">*</code>) can be prefixed with a label that starts with <code class="bg-zinc-700 rounded-sm px-1"><i>$</i></code>.</p>
             <div id="cscsca-help-labels-3" class="h-12 w-128 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
             <br/>
-            <p>Labels cause selections to agree in which subgroup they select, optionals in if their content is required, repetitions in maximum length², and <code class="bg-zinc-700 rounded-sm px-1">*</code> in which phone is required.</p>
+            <p>Labels cause selections to agree in which subgroup they select, optionals in if their content is required, repetitions in the phones that they match, and <code class="bg-zinc-700 rounded-sm px-1">*</code> in which phone is matched.</p>
             <br/>
             <p>Labels can also cause agreement in conditions as well.</p>
             <div id="cscsca-help-labels-4" class="h-12 w-128 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
-            <br/>
-            <br/>
-            <p>(2) This behavior may change in the future.</p>
             <br/>
             <br/>
             <h3 class="text-4xl">Definitions</h2>
