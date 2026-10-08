@@ -46,7 +46,7 @@
             <p>There are also some special characters that represent phones.</p>
             <ul class="list-disc pl-8">
                 <li>
-                    <p><code class="bg-zinc-700 rounded-sm px-1">#</code>: represents a word boundary</p>
+                    <p><code class="bg-zinc-700 rounded-sm px-1">#</code>: represents a word boundary²</p>
                 </li>
                 <li>
                     <p><code class="bg-zinc-700 rounded-sm px-1">*</code>: represents any phone except a word boundary</p>
@@ -55,6 +55,7 @@
             <br/>
             <br/>
             <p>(1) This may not be up to date with the latest unicode version, but should support the vast majority use cases.</p>
+            <p>(2) It is strongly suggested to not use <code class="bg-zinc-700 rounded-sm px-1">#</code> at the start or end of an input as it may be missed by the applier in some circumstances. Instead, use conditions to verify the ends of words.</p>
             <br/>
             <br/>
             <h3 class="text-4xl">Conditions</h2>
