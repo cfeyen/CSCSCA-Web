@@ -1,4 +1,4 @@
-use cscsca::{IoGetter, Lexer, LogRuntime, ScaError, SirToken, build_rules};
+use cscsca::{IoGetter, Lexer, LogRuntime, ScaError, SirToken, AppliableRules};
 use wasm_bindgen::prelude::wasm_bindgen;
 
 #[wasm_bindgen(module = "/src/sca_type_bindings.ts")]
@@ -152,7 +152,7 @@ impl ScaResult {
 
 #[wasm_bindgen]
 pub fn apply(input: &str, rules: &str) -> ScaResult {
-    let rules = match build_rules(rules, &mut WebGetter) {
+    let rules = match AppliableRules::new(rules, &mut WebGetter) {
         Err(e) => return ScaResult::new_error(e, None),
         Ok(rules) => rules,
     };

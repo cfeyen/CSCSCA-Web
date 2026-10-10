@@ -205,6 +205,9 @@
   .h-12 {
     height: calc(var(--spacing) * 12);
   }
+  .h-26 {
+    height: calc(var(--spacing) * 26);
+  }
   .h-\[50\%\] {
     height: 50%;
   }

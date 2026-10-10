@@ -16,8 +16,8 @@ checksum = "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
 
 [[package]]
 name = "cscsca"
-version = "0.41.0"
-source = "git+https://github.com/cfeyen/cscsca.git#e7358839b9d9f6cbcada1ed30ef27172c3da3108"
+version = "0.42.0"
+source = "git+https://github.com/cfeyen/cscsca.git#5bc5f9b70f1dfd7c383f806d4f68290bd8731a81"
 dependencies = [
  "cscsca_macros",
 ]
@@ -33,7 +33,7 @@ dependencies = [
 [[package]]
 name = "cscsca_macros"
 version = "0.3.1"
-source = "git+https://github.com/cfeyen/cscsca.git#e7358839b9d9f6cbcada1ed30ef27172c3da3108"
+source = "git+https://github.com/cfeyen/cscsca.git#5bc5f9b70f1dfd7c383f806d4f68290bd8731a81"
 dependencies = [
  "proc-macro2",
  "quote",

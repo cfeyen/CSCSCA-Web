@@ -118,10 +118,21 @@
             <br/>
             <h3 class="text-4xl">Definitions</h2>
             <hr/>
+            <p>It is often very useful to reuse parts of a rule. A definition may be used to do this.</p>
+            <p>A definition is defined by starting a line with <code class="bg-zinc-700 rounded-sm px-1">DEFINE</code> followed by a name and the definition's contents.</p>
+            <p>The definition may then be inserted into a rule by writing <code class="bg-zinc-700 rounded-sm px-1">@</code> before the definition's name.</p>
+            <div id="cscsca-help-definitions-1" class="h-26 w-144 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <p>is the same as</p>
+            <div id="cscsca-help-definitions-2" class="h-26 w-144 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <p>Labels may be added to scopes at the start of an inseted definition allowing the rule at the end of the last section may be rewritten as the rule bellow¹.</p>
+            <div id="cscsca-help-definitions-3" class="h-26 w-144 border-2 border-zinc-700 rounded-md overflow-hidden"></div>
+            <p>Definitions may be redefined. When inserted, the most recent definition will be used.</p>
+            <p>If you want definition insetions in the content of a definition to update when they are redefined, define the containing definition with <code class="bg-zinc-700 rounded-sm px-1">DEFINE_LAZY</code> instead of <code class="bg-zinc-700 rounded-sm px-1">DEFINE</code>.</p>
+            <br/>
+            <br/>
+            <p>(1) For those familiar: definitions work similar to zero-parameter macros in the programming language C, but evaluate internal definitions when defined instead of when inserted (unless defined as lazy).</p>
 
 
-            <!-- todo: agreement and labels -->
-            <!-- todo: Definitions -->
             <!-- todo: PRINT -->
             <!-- todo: Escapes and multiline rules -->
             <!-- todo: ! -->

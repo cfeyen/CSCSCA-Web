@@ -22,3 +22,7 @@ create_cscsca_editor("cscsca-help-labels-1", "## Voiced stops devoice\n{b, d, g}
 create_cscsca_editor("cscsca-help-labels-2", "## Voiced stops merge with dorsal fricatives\n{x, h} {b, d, g} >> {p, t, k}", true);
 create_cscsca_editor("cscsca-help-labels-3", "## Voiced stops merge with dorsal fricatives\n{x, h} $stop{b, d, g} >> $stop{p, t, k}", true);
 create_cscsca_editor("cscsca-help-labels-4", "## Nasals assimilate\n{m, n} >> $place{m, n, ŋ} / _ $place{p, t, k}", true);
+
+create_cscsca_editor("cscsca-help-definitions-1", "## Creates a definition containing a selection of all vowels\nDEFINE V {i, e, a, u, o}\n\n## Stops voice between vowels\n{p, t, k} >> {b, d, g} / @V _ @V", true);
+create_cscsca_editor("cscsca-help-definitions-2", "\n\n\n## Stops voice between vowels\n{p, t, k} >> {b, d, g} / {i, e, a, u, o} _ {i, e, a, u, o}", true);
+create_cscsca_editor("cscsca-help-definitions-3", "DEFINE N {m, n, ŋ}\nDEFINE P {p, t, k}\n\n## Nasals assimilate\n@N >> $place@N / _ $place@P", true);
