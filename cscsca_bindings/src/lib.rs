@@ -1,4 +1,4 @@
-use cscsca::{IoGetter, Lexer, LogRuntime, ScaError, SirToken, AppliableRules};
+use cscsca::{AppliableRules, IoGetter, Lexer, LogRuntime, ScaError, SirToken, tokens::ScopeType};
 use wasm_bindgen::prelude::wasm_bindgen;
 
 #[wasm_bindgen(module = "/src/sca_type_bindings.ts")]
@@ -30,9 +30,10 @@ pub fn gen_tokens(rules: &str) -> Vec<ScaToken> {
         let t = match token {
             SirToken::Any(_)
             | SirToken::Bound(_)
-            | SirToken::CondFocus(_, _)
             | SirToken::Negative(_)
             => TokenType::Special,
+            SirToken::ScopeSplit(_) => TokenType::ScopeSplit,
+            SirToken::CondFocus(_, _) => TokenType::CondFocus,
             SirToken::Break(_, _) => TokenType::Break,
             SirToken::Comment(_) => TokenType::Comment,
             SirToken::Message(_, _) => TokenType::IoMsg,
@@ -55,9 +56,8 @@ pub fn gen_tokens(rules: &str) -> Vec<ScaToken> {
             SirToken::Variable(_) => TokenType::VariableCall,
             SirToken::Label(_) => TokenType::Label,
             SirToken::ArgSep(_) => TokenType::Punctuation,
-            SirToken::ScopeStart(_, _)
-            | SirToken::ScopeEnd(_, _)
-            => TokenType::ScopeBound,
+            SirToken::ScopeStart(t, _) => TokenType::ScopeStart(t),
+            SirToken::ScopeEnd(t, _) => TokenType::ScopeEnd(t),
             SirToken::Number(_, _) => TokenType::Number,
             SirToken::Phone(_) => match last {
                 TokenOfNote::Definition => TokenType::DefinitionDecl,
@@ -79,6 +79,7 @@ enum TokenType {
     Comment,
     IoMsg,
     Special,
+    CondFocus,
     StatementStart,
     NewLineEscape,
     Error,
@@ -89,16 +90,28 @@ enum TokenType {
     VariableDecl,
     Break,
     Punctuation,
-    ScopeBound,
+    ScopeStart(ScopeType),
+    ScopeEnd(ScopeType),
+    ScopeSplit,
     Number,
     Phone,
     Whitespace,
+}
+
+fn get_code(t: &ScopeType) -> &'static str {
+    match t {
+        ScopeType::Optional => "opt",
+        ScopeType::Selection => "sel",
+        ScopeType::Repetition => "rep",
+    }
 }
 
 impl std::fmt::Display for TokenType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Special => write!(f, "special"),
+            Self::ScopeSplit => write!(f, "scope-split"),
+            Self::CondFocus => write!(f, "cond-focus"),
             Self::Comment | Self::IoMsg => write!(f, "comment"),
             Self::StatementStart => write!(f, "statement"),
             Self::NewLineEscape => write!(f, "escaped-newline"),
@@ -108,7 +121,14 @@ impl std::fmt::Display for TokenType {
             Self::Label => write!(f, "label"),
             Self::Break => write!(f, "break"),
             Self::Punctuation => write!(f, "punctuation-seperator"),
-            Self::ScopeBound => write!(f, "punctuation-bound"),
+            Self::ScopeStart(t) => {
+                let t = get_code(t);
+                write!(f, "punctuation-bound-start-{t}")
+            },
+            Self::ScopeEnd(t) => {
+                let t = get_code(t);
+                write!(f, "punctuation-bound-end-{t}",)
+            },
             Self::Number => write!(f, "number"),
             Self::Phone => write!(f, "phone"),
             Self::Whitespace => write!(f, "whitespace"),

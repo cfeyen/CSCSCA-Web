@@ -16,7 +16,7 @@ create_cscsca_editor("cscsca-help-conditions-6", "## [h] is lost except when wor
 create_cscsca_editor("cscsca-help-scopes-1", "## [ng] and [nk] merge to [ŋ]\nn {k, g} >> ŋ", true);
 create_cscsca_editor("cscsca-help-scopes-2", "## [l] and [lj] merge to [j]\na >> l (j) >> j", true);
 create_cscsca_editor("cscsca-help-scopes-3", "## [u] fronts to [y] when following [i] within the word\nu >> y / _ [*] i", true);
-create_cscsca_editor("cscsca-help-scopes-4", "## Epenthesis of [t] between [es] and [r] or [ess] and [r]\n>> t / e [s = 1, 2] _ r", true);
+create_cscsca_editor("cscsca-help-scopes-4", "## Epenthesis of [t] between [es] and [r] or [ess] and [r]\n>> t / e [s | 1, 2] _ r", true);
 
 create_cscsca_editor("cscsca-help-labels-1", "## Voiced stops devoice\n{b, d, g} >> {p, t, k}", true);
 create_cscsca_editor("cscsca-help-labels-2", "## Voiced stops merge with dorsal fricatives\n{x, h} {b, d, g} >> {p, t, k}", true);
