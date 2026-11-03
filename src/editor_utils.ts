@@ -1,4 +1,5 @@
 import * as monaco from "monaco-editor/editor"
+import "monaco-editor/editor/contrib/hover/browser/hoverContribution"
 import "monaco-editor/editor/contrib/wordOperations/browser/wordOperations"
 import { gen_tokens } from "../cscsca_bindings/pkg/cscsca_bindings.js"
 import * as sca from "../cscsca_bindings/src/sca_type_bindings.js"
@@ -186,7 +187,71 @@ monaco.languages.setLanguageConfiguration("cscsca", {
     comments: { lineComment: { comment: "##", noIndent: true } },
 });
 
-export function create_cscsca_editor(id: string, rules: string, readOnly = false): monaco.editor.IStandaloneCodeEditor {
+monaco.languages.registerHoverProvider("cscsca", {
+    provideHover: (model, position) => {
+        let line_tokens = gen_tokens(model.getLineContent(position.lineNumber)) as sca.ScaToken[];
+
+        let token_end = model.getLineLength(position.lineNumber) + 1;
+        let token = null;
+
+        for (let i = line_tokens.length - 1; i >= 0; i--) {
+            const tok = line_tokens[i];
+
+            if (tok == null) { continue; }
+            
+            if (tok.get_starting_index() + 1 <= position.column) {
+                token = tok;
+                break;
+            } else {
+                token_end = tok.get_starting_index() + 1;
+            }
+        }
+
+        if (token === null || token.get_token_type() === TOKEN_TYPE_WHITESPACE) {
+            return null;
+        }
+
+        const range = new monaco.Range(position.lineNumber, token.get_starting_index() + 1, position.lineNumber, token_end);
+        const word = model.getValueInRange(range);
+
+        let value: string | null = null;
+
+        switch (token.get_token_type()) {
+            case TOKEN_TYPE_PHONE:
+                value = `Phone\n\`\`\`cscsca\n${word}\n\`\`\``;
+                break;
+            case TOKEN_TYPE_LABEL:
+                value = `Label\n\`\`\`cscsca\n${word}\n\`\`\``;
+                break;
+            case TOKEN_TYPE_DEFINTION:
+                if (word.startsWith('@')) {
+                    const name = word.substring(1);
+
+                    let content = EDITOR_STATE.get_definition(name, position.lineNumber - 1);
+
+                    value = content === null
+                        ? `Definition\n\`\`\`cscsca\n${word}\n\`\`\``
+                        : `Definition\n\`\`\`cscsca\n${word}\n${content}\n\`\`\``;
+                } else {
+                    let content = EDITOR_STATE.get_definition(word, position.lineNumber - 1);
+
+                    value = content === null
+                        ? `Definition (Declaration)\n\`\`\`cscsca\n@${word}\n\`\`\``
+                        : `Definition (Declaration)\n\`\`\`cscsca\n@${word}\n${content}\n\`\`\``;
+                }
+                break;
+            default:
+                break;
+        }
+
+        return value ? {
+            range,
+            contents: [{ value }],
+        } : null;
+    }
+});
+
+export function create_cscsca_editor(id: string, rules: string, readOnly: boolean = false, onEdit: ((editor: monaco.editor.IStandaloneCodeEditor) => void) | null = null): monaco.editor.IStandaloneCodeEditor {
     const editor = monaco.editor.create(document.getElementById(id) as HTMLElement, {
         theme: "cscsca-dark",
         language: "cscsca",
@@ -204,12 +269,99 @@ export function create_cscsca_editor(id: string, rules: string, readOnly = false
         lineNumbers: readOnly ? "off" : "on",
         renderLineHighlight: readOnly ? "none" : "all",
         autoClosingBrackets: "languageDefined",
+        hover: {
+            enabled: readOnly ? "off" : "on",
+            sticky: true,
+            above: false,
+        },
     });
 
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Slash, () => { toggle_comment(editor) });
+    editor.onEndUpdate(() => {
+        if (onEdit !== null) { onEdit(editor); }
+    });
+
+
+    if (onEdit !== null) { onEdit(editor); }
 
     return editor;
 }
+
+function end_is_escaped(line: string): boolean {
+    if (line.startsWith("##")) {
+        return false;
+    }
+
+    let escapes = 0;
+
+    let chars = line.split('');
+
+    while (chars.pop() === '\\') { escapes++;}
+
+    return escapes % 2 === 1;
+}
+
+export class EditorState {
+    public constructor() {}
+
+    public update(text: string) {
+        this.definitions = new Map();
+        let lines = text.split('\n');
+
+        for (let l = 0; l < lines.length; l++) {
+            let line = lines[l] as string;
+
+            if (line.startsWith("DEFINE ") || line.startsWith("DEFINE_LAZY ")) {
+                let start_line = l;
+
+                line = line.startsWith("DEFINE ")
+                    ? line.substring("DEFINE ".length).trimStart()
+                    : line.substring("DEFINE_LAZY ".length).trimStart();
+
+                let name_end_index = line.indexOf(' ');
+
+                if (name_end_index <= 0) { continue; }
+
+                let name = line.substring(0, name_end_index);
+                let content = line.substring(name_end_index).trimStart();
+                let last_line = content;
+
+                while (end_is_escaped(last_line)) {
+                    l++;
+                    let next_line = lines[l];
+                    
+                    if (next_line !== undefined) {
+                        content = `${content}\n${next_line}`;
+                        last_line = next_line;
+                    } else {
+                        break;
+                    }
+                }
+
+                let data: [number, string] = [start_line, content];
+
+                if (this.definitions.has(name)) {
+                    this.definitions.get(name)?.push(data);
+                } else {
+                    this.definitions.set(name, [data]);
+                }
+            }
+        }
+    }
+
+    // maps a defintion name to a the line number it is defined on and its content
+    private definitions: Map<string, [number, string][]> = new Map();
+
+    public get_definition(name: string, line: number): string | null {
+        let defs = this.definitions.get(name);
+
+        if (defs === undefined) { return null; }
+
+        return defs.reduce((acc, elem) => elem[0] <= line ? elem : acc)[1];
+    }
+}
+
+export const EDITOR_STATE: EditorState = new EditorState();
 
 function toggle_comment(editor: monaco.editor.IStandaloneCodeEditor) {
     const selection = editor.getSelection();

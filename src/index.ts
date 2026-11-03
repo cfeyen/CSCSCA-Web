@@ -2,7 +2,7 @@ import "tailwindcss"
 import * as sca from "../cscsca_bindings/src/sca_type_bindings.js"
 import init, { apply } from "../cscsca_bindings/pkg/cscsca_bindings.js"
 import { set_output } from "./output_gen.ts"
-import { create_cscsca_editor } from "./editor_utils.ts"
+import { create_cscsca_editor, EDITOR_STATE } from "./editor_utils.ts"
 
 await init();
 
@@ -23,11 +23,15 @@ function get_rules(): string {
     return local == null ? DEFAULT_RULES : local;
 }
 
-const editor = create_cscsca_editor("cscsca-rules", get_rules())
-
-editor.onEndUpdate(() => {
-    localStorage.setItem(RULE_KEY, editor.getValue());
-});
+const editor = create_cscsca_editor(
+    "cscsca-rules",
+    get_rules(),
+    false,
+    (editor) => {
+        localStorage.setItem(RULE_KEY, editor.getValue());
+        EDITOR_STATE.update(editor.getValue());
+    },
+);
 
 const input_box = document.getElementById("cscsca-input")! as HTMLTextAreaElement;
 
