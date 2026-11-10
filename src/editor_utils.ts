@@ -230,7 +230,7 @@ monaco.languages.registerHoverProvider("cscsca", {
                     let content = EDITOR_STATE.get_definition(name, position.lineNumber - 1);
 
                     value = content === null
-                        ? `Definition\n\`\`\`cscsca\n${word}\n\`\`\``
+                        ? `Definition (Undefined)\n\`\`\`cscsca\n${word}\n\`\`\``
                         : `Definition\n\`\`\`cscsca\n${word}\n${content}\n\`\`\``;
                 } else {
                     let content = EDITOR_STATE.get_definition(word, position.lineNumber - 1);
@@ -357,7 +357,9 @@ export class EditorState {
 
         if (defs === undefined) { return null; }
 
-        return defs.reduce((acc, elem) => elem[0] <= line ? elem : acc)[1];
+        const [def_line, content] = defs.reduce((acc, elem) => elem[0] <= line ? elem : acc);
+
+        return def_line <= line ? content : null;
     }
 }
 
