@@ -5,6 +5,7 @@ const trace_box = document.getElementById("cscsca-trace")! as HTMLSelectElement;
 
 const TRACE_MODE_OUTPUT_ONLY = "output"
 const TRACE_MODE_INPUT_AND_OUTPUT_ONLY = "input/output"
+const TRACE_MODE_DIFF_ONLY = "diff-only"
 const TRACE_MODE_DIFF = "diff"
 const TRACE_MODE_ALL = "all"
 
@@ -22,6 +23,9 @@ export function set_output(result: sca.ScaResult) {
                 break;
             case TRACE_MODE_INPUT_AND_OUTPUT_ONLY:
                 output_box.appendChild(create_input_and_output_column(result));
+                break;
+            case TRACE_MODE_DIFF_ONLY:
+                output_box.appendChild(create_diff_table(result));
                 break;
             case TRACE_MODE_DIFF:
                 output_box.appendChild(create_trace_table(result, true));
@@ -81,6 +85,68 @@ function create_input_and_output_column(result: sca.ScaResult): HTMLTableElement
     return table;
 }
 
+function create_diff_table(result: sca.ScaResult): HTMLTableElement {
+    const headers = result.get_headers();
+    const evos = result.get_evolutions().map(e => e.get_intermediate());
+    const final_col = result.get_evolutions().map(e => e.get_final());
+
+    const diff_headers: string[] = ["Initial"];
+    let last_col = result.get_evolutions().map(e => e.get_initial());
+    const diff_rows = last_col.map(e => [e]);
+
+    for (let col = 0; col < headers.length; col++) {
+        let this_col: string[] = [];
+
+        for (let row = 0; row < evos.length; row++) {
+            this_col.push(evos[row]![col]!);
+        }
+
+        let is_diff = false;
+        const diff_col = [];
+
+        for (let row = 0; row < evos.length; row++) {
+            if (last_col[row] !== this_col[row]) {
+                is_diff = true;
+                diff_col.push(this_col[row]);
+            } else {
+                diff_col.push("")
+            }
+        }
+
+        if (is_diff) {
+            diff_headers.push(headers[col]!);
+
+            for (let row = 0; row < evos.length; row++) {
+                diff_rows[row]?.push(diff_col[row]!)
+            }
+
+            last_col = this_col;
+        }
+    }
+
+    const table = create_table();
+    
+    
+    const header_row = create_table_row();
+    diff_headers.forEach(header => header_row.appendChild(create_table_header(header)));
+    header_row.appendChild(create_table_header("Final"));
+    table.appendChild(header_row);
+
+    let r = 0;
+
+    diff_rows.forEach(intermediate => {
+        const row = create_table_row();
+
+        intermediate.forEach(step => row.appendChild(create_table_cell(step)) );
+        row.appendChild(create_table_cell(final_col[r]!));
+
+        table.appendChild(row);
+
+        r++;
+    });
+
+    return table;
+}
 
 function create_trace_table(result: sca.ScaResult, diff_only: boolean): HTMLTableElement {
     const table = create_table();
