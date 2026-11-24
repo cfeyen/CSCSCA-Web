@@ -1,6 +1,16 @@
 import * as monaco from "monaco-editor/editor"
 import "monaco-editor/editor/contrib/hover/browser/hoverContribution"
 import "monaco-editor/editor/contrib/wordOperations/browser/wordOperations"
+import "monaco-editor/editor/contrib/find/browser/findController"
+import "monaco-editor/editor/contrib/find/browser/findDecorations"
+import "monaco-editor/editor/contrib/find/browser/findModel"
+import "monaco-editor/editor/contrib/find/browser/findOptionsWidget"
+import "monaco-editor/editor/contrib/find/browser/findState"
+import "monaco-editor/editor/contrib/find/browser/findWidget"
+import "monaco-editor/editor/contrib/find/browser/findWidgetSearchHistory"
+import "monaco-editor/editor/contrib/find/browser/replaceAllCommand"
+import "monaco-editor/editor/contrib/find/browser/replacePattern"
+import "monaco-editor/editor/contrib/find/browser/replaceWidgetHistory"
 import { gen_tokens } from "../cscsca_bindings/pkg/cscsca_bindings.js"
 import * as sca from "../cscsca_bindings/src/sca_type_bindings.js"
 
@@ -240,6 +250,21 @@ monaco.languages.registerHoverProvider("cscsca", {
                         : `Definition (Declaration)\n\`\`\`cscsca\n@${word}\n${content}\n\`\`\``;
                 }
                 break;
+            case TOKEN_TYPE_SPECIAL:
+                switch (word) {
+                    case "#":
+                        value = "```cscsca\n#\n```\nA word boundary";
+                        break;
+                    case "*":
+                        value = "```cscsca\n*\n```\nAny phone\n\n(Excludes word bondaries)";
+                        break;
+                    case "!":
+                        value = "```cscsca\n!\n```\nRepresents the phones represented by the token to the left, if those phones are not represented by the token on the right";
+                        break;
+                    default:
+                        break;
+                }
+                break;
             default:
                 break;
         }
@@ -281,8 +306,12 @@ export function create_cscsca_editor(id: string, rules: string, readOnly: boolea
         if (onEdit !== null) { onEdit(editor); }
     });
 
-
     if (onEdit !== null) { onEdit(editor); }
+
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyF, () => {
+        console.log("here")
+        editor.getAction("actions.find")?.run()
+    })
 
     return editor;
 }
